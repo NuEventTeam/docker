@@ -15,6 +15,10 @@ services:
       - '8000:8000'
     networks:
       - api
+    depends_on:
+      - auth-db
+      - keydb
+      - migrator
 
   auth:
     container_name: auth
@@ -29,11 +33,25 @@ services:
     networks:
       - api
     depends_on:
-      - postgres
+      - auth-db
       - keydb
+      - migrator
       - gateway
 
-  postgres-auth:
+  migrator:
+    container_name: migrations
+    build:
+      context: ../
+      dockerfile: ./docker/migrator/Dockerfile
+    image: auth
+    restart: always
+    tty: true
+    networks:
+      - api
+    depends_on:
+      - auth-db
+
+  auth-db:
     image: postgres:15.4-alpine
     restart: always
     tty: true

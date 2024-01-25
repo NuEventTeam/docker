@@ -1,14 +1,13 @@
 FROM golang:1.21.6-alpine3.18 AS builder
-WORKDIR /src
-COPY . .
-RUN go  build -v -ldflags="-w -s" -o server ./cmd/main.go
-
-FROM golang:1.21.6-alpine3.18
 WORKDIR /app
 
-RUN apk add --no-cache tzdata && \ ENV TZ=Asia/Almaty
+COPY ../../migrator .
 
-COPY --from=builder /src/server .
-COPY --from=builder /src/config/local.yaml .
+RUN go  build -v -ldflags="-w -s" -o app main.go
 
-CMD ["sh", "-c", "./main"]
+FROM alpine:3.18
+WORKDIR /app
+
+COPY --from=builder /app .
+
+ENTRYPOINT ["app", "migrate", "up"]
