@@ -1,0 +1,73 @@
+version: '3.9'
+
+services:
+  gateway:
+    container_name: gateway
+    build:
+      context: ../
+      dockerfile: ./docker/gateway/Dockerfile
+    image: gateway
+    restart: always
+    tty: true
+    volumes:
+      - ../${API_DIR:-gateway-api}:/var/www/gateway
+    ports:
+      - '8000:8000'
+    networks:
+      - api
+
+  auth:
+    container_name: auth
+    build:
+      context: ../
+      dockerfile: ./docker/auth/Dockerfile
+    image: auth
+    restart: always
+    tty: true
+    ports:
+      - '8001:8001'
+    networks:
+      - api
+    depends_on:
+      - postgres
+      - keydb
+      - gateway
+
+  postgres-auth:
+    image: postgres:15.4-alpine
+    restart: always
+    tty: true
+    environment:
+      POSTGRES_DB: auth
+      POSTGRES_USER: auth
+      POSTGRES_PASSWORD: auth
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-auth:/var/lib/postgresql/data
+    networks:
+      - api
+
+
+  keydb:
+    container_name: auth-keydb
+    image: eqalpha/keydb:latest
+    restart: always
+    tty: true
+    volumes:
+      - keydb:/data
+    ports:
+      - '6379:6379'
+    networks:
+      - api
+
+volumes:
+  postgres-auth:
+    driver: local
+  keydb:
+    driver: local
+
+
+networks:
+  api:
+    driver: bridge
