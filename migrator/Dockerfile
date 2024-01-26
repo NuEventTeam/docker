@@ -1,7 +1,7 @@
 FROM golang:1.21.6-alpine3.18 AS builder
 WORKDIR /app
 
-COPY ../../migrator .
+COPY ../../migration .
 
 RUN go  build -v -ldflags="-w -s" -o app main.go
 
