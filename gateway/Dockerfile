@@ -2,7 +2,6 @@ FROM golang:1.21.6-alpine3.18 AS builder
 WORKDIR /app
 
 RUN apk add --no-cache tzdata
-RUN apk add git
 
 
 COPY ../../gateway .
