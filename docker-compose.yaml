@@ -43,8 +43,6 @@ services:
     build:
       context: ../
       dockerfile: ./docker/migrator/Dockerfile
-    image: auth
-    restart: always
     tty: true
     networks:
       - api

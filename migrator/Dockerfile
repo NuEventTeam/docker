@@ -10,4 +10,4 @@ WORKDIR /app
 
 COPY --from=builder /app .
 
-ENTRYPOINT ["app", "migrate", "up"]
+ENTRYPOINT ["./app", "migrate", "up"]
