@@ -44,6 +44,7 @@ services:
       context: ../
       dockerfile: ./docker/migrator/Dockerfile
     tty: true
+    restart: always
     networks:
       - api
     depends_on:
@@ -63,6 +64,20 @@ services:
       - postgres-auth:/var/lib/postgresql/data
     networks:
       - api
+  event-db:
+    image: postgres:15.4-alpine
+    restart: always
+    tty: true
+    environment:
+      POSTGRES_DB: event
+      POSTGRES_USER: event
+      POSTGRES_PASSWORD: event
+    ports:
+      - '5433:5432'
+    volumes:
+      - postgres-event:/var/lib/postgresql/data
+    networks:
+      - api
 
 
   keydb:
@@ -79,6 +94,8 @@ services:
 
 volumes:
   postgres-auth:
+    driver: local
+  postgres-event:
     driver: local
   keydb:
     driver: local
