@@ -28,7 +28,7 @@ services:
     image: auth
     restart: always
     tty: true
-    ports:
+    expose:
       - '8001:8001'
     networks:
       - api
@@ -58,7 +58,7 @@ services:
       POSTGRES_DB: auth
       POSTGRES_USER: auth
       POSTGRES_PASSWORD: auth
-    ports:
+    expose:
       - '5432:5432'
     volumes:
       - postgres-auth:/var/lib/postgresql/data
@@ -72,7 +72,7 @@ services:
       POSTGRES_DB: event
       POSTGRES_USER: event
       POSTGRES_PASSWORD: event
-    ports:
+    expose:
       - '5433:5432'
     volumes:
       - postgres-event:/var/lib/postgresql/data
@@ -87,8 +87,10 @@ services:
     tty: true
     volumes:
       - keydb:/data
-    ports:
+    expose:
       - '6379:6379'
+    command:
+     - '--requirepass auth'
     networks:
       - api
 
