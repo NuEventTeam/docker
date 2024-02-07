@@ -37,7 +37,38 @@ services:
       - keydb
       - migrator
       - gateway
-
+  cdn:
+    container_name: cdn
+    build:
+      context: ../
+      dockerfile: ./docker/cdn/Dockerfile
+    image: cdn
+    restart: always
+    tty: true
+    expose:
+      - '8003:8003'
+    ports:
+      - '8003:8003'
+    networks:
+      - api
+    depends_on:
+      - gateway
+  event:
+    container_name: event
+    build:
+      context: ../
+      dockerfile: ./docker/event/Dockerfile
+    image: event
+    restart: always
+    tty: true
+    expose:
+      - '8002:8002'
+    networks:
+      - api
+    depends_on:
+      - gateway
+      - auth
+      - event-db
   migrator:
     container_name: migrations
     build:
@@ -49,9 +80,11 @@ services:
       - api
     depends_on:
       - auth-db
+      - event-db
 
   auth-db:
     image: postgres:15.4-alpine
+    container_name: auth-db
     restart: always
     tty: true
     environment:
@@ -60,12 +93,15 @@ services:
       POSTGRES_PASSWORD: auth
     expose:
       - '5432:5432'
+    ports:
+      - '5432:5432'
     volumes:
       - postgres-auth:/var/lib/postgresql/data
     networks:
       - api
   event-db:
     image: postgres:15.4-alpine
+    container_name: event-db
     restart: always
     tty: true
     environment:
@@ -73,6 +109,8 @@ services:
       POSTGRES_USER: event
       POSTGRES_PASSWORD: event
     expose:
+      - '5433:5432'
+    ports:
       - '5433:5432'
     volumes:
       - postgres-event:/var/lib/postgresql/data
