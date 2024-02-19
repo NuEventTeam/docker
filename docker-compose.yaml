@@ -130,7 +130,7 @@ services:
     ports:
       - '5434:5432'
     volumes:
-      - postgres-event:/var/lib/postgresql/data
+      - postgres-user:/var/lib/postgresql/data
     networks:
       - api
 
@@ -152,6 +152,8 @@ volumes:
   postgres-auth:
     driver: local
   postgres-event:
+    driver: local
+  postgres-user:
     driver: local
   keydb:
     driver: local
