@@ -4,7 +4,7 @@ WORKDIR /app
 RUN apk add --no-cache tzdata
 
 
-COPY ../../gateway .
+COPY ../../user .
 
 RUN go  build -v -ldflags="-w -s" -o app ./cmd/main.go
 

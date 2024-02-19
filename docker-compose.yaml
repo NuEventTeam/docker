@@ -1,18 +1,18 @@
 version: '3.9'
 
 services:
-  gateway:
-    container_name: gateway
+  user:
+    container_name: user
     build:
       context: ../
-      dockerfile: ./docker/gateway/Dockerfile
-    image: gateway
+      dockerfile: user/Dockerfile
+    image: user
     restart: always
     tty: true
     volumes:
-      - ../${API_DIR:-gateway-api}:/var/www/gateway
+      - ../${API_DIR:-user-api}:/var/www/user
     ports:
-      - '8000:8000'
+      - '8002:8002'
     networks:
       - api
     depends_on:
@@ -29,7 +29,7 @@ services:
     restart: always
     tty: true
     expose:
-      - '8001:8001'
+      - '8000:8000'
     networks:
       - api
     depends_on:
@@ -62,7 +62,7 @@ services:
     restart: always
     tty: true
     expose:
-      - '8002:8002'
+      - '8001:8001'
     networks:
       - api
     depends_on:
@@ -116,7 +116,23 @@ services:
       - postgres-event:/var/lib/postgresql/data
     networks:
       - api
-
+  user-db:
+    image: postgres:15.4-alpine
+    container_name: event-db
+    restart: always
+    tty: true
+    environment:
+      POSTGRES_DB: event
+      POSTGRES_USER: event
+      POSTGRES_PASSWORD: event
+    expose:
+      - '5434:5432'
+    ports:
+      - '5434:5432'
+    volumes:
+      - postgres-event:/var/lib/postgresql/data
+    networks:
+      - api
 
   keydb:
     container_name: auth-keydb
