@@ -1,22 +1,6 @@
 version: '3.9'
 
 services:
-  user:
-    container_name: user
-    build:
-      context: ../
-      dockerfile: ./docker/user/Dockerfile
-    image: user
-    restart: always
-    tty: true
-    expose:
-      - '8002:8002'
-    networks:
-      - api
-    depends_on:
-      - auth-db
-      - keydb
-      - migrator
   auth:
     container_name: auth
     build:
@@ -26,6 +10,8 @@ services:
     restart: always
     tty: true
     expose:
+      - '8000:8000'
+    ports:
       - '8000:8000'
     networks:
       - api
@@ -57,6 +43,8 @@ services:
     tty: true
     expose:
       - '8001:8001'
+    ports:
+      - '8001:8001'
     networks:
       - api
     depends_on:
@@ -74,7 +62,6 @@ services:
     depends_on:
       - auth-db
       - event-db
-      - user-db
 
   auth-db:
     image: postgres:15.4-alpine
@@ -110,23 +97,6 @@ services:
       - postgres-event:/var/lib/postgresql/data
     networks:
       - api
-  user-db:
-    image: postgres:15.4-alpine
-    container_name: user-db
-    restart: always
-    tty: true
-    environment:
-      POSTGRES_DB: user
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: user
-    expose:
-      - '5434:5432'
-    ports:
-      - '5434:5432'
-    volumes:
-      - postgres-user:/var/lib/postgresql/data
-    networks:
-      - api
 
   keydb:
     container_name: auth-keydb
@@ -137,6 +107,8 @@ services:
       - keydb:/data
     expose:
       - '6379:6379'
+    ports:
+      - '6379:6379'
     command:
      - '--requirepass auth'
     networks:
@@ -146,8 +118,6 @@ volumes:
   postgres-auth:
     driver: local
   postgres-event:
-    driver: local
-  postgres-user:
     driver: local
   keydb:
     driver: local
