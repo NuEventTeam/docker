@@ -1,25 +1,6 @@
 version: '3.9'
 
 services:
-  gateway:
-    container_name: gateway
-    build:
-      context: ../
-      dockerfile: ./docker/gateway/Dockerfile
-    image: gateway
-    restart: always
-    tty: true
-    volumes:
-      - ../${API_DIR:-gateway-api}:/var/www/gateway
-    ports:
-      - '8000:8000'
-    networks:
-      - api
-    depends_on:
-      - auth-db
-      - keydb
-      - migrator
-
   auth:
     container_name: auth
     build:
@@ -29,14 +10,15 @@ services:
     restart: always
     tty: true
     expose:
-      - '8001:8001'
+      - '8000:8000'
+    ports:
+      - '8000:8000'
     networks:
       - api
     depends_on:
       - auth-db
       - keydb
       - migrator
-      - gateway
   cdn:
     container_name: cdn
     build:
@@ -51,8 +33,6 @@ services:
       - '8003:8003'
     networks:
       - api
-    depends_on:
-      - gateway
   event:
     container_name: event
     build:
@@ -62,11 +42,12 @@ services:
     restart: always
     tty: true
     expose:
-      - '8002:8002'
+      - '8001:8001'
+    ports:
+      - '8001:8001'
     networks:
       - api
     depends_on:
-      - gateway
       - auth
       - event-db
   migrator:
@@ -117,7 +98,6 @@ services:
     networks:
       - api
 
-
   keydb:
     container_name: auth-keydb
     image: eqalpha/keydb:latest
@@ -126,6 +106,8 @@ services:
     volumes:
       - keydb:/data
     expose:
+      - '6379:6379'
+    ports:
       - '6379:6379'
     command:
      - '--requirepass auth'
