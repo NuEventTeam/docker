@@ -11,8 +11,10 @@ services:
     tty: true
     expose:
       - '8001:8001'
+      - '8002:8002'
     ports:
       - '8001:8001'
+      - '8002:8002'
     networks:
       - api
     depends_on:
