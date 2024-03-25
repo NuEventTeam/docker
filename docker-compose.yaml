@@ -1,38 +1,6 @@
 version: '3.9'
 
 services:
-  auth:
-    container_name: auth
-    build:
-      context: ../
-      dockerfile: ./docker/auth/Dockerfile
-    image: auth
-    restart: always
-    tty: true
-    expose:
-      - '8000:8000'
-    ports:
-      - '8000:8000'
-    networks:
-      - api
-    depends_on:
-      - auth-db
-      - keydb
-      - migrator
-  cdn:
-    container_name: cdn
-    build:
-      context: ../
-      dockerfile: ./docker/cdn/Dockerfile
-    image: cdn
-    restart: always
-    tty: true
-    expose:
-      - '8003:8003'
-    ports:
-      - '8003:8003'
-    networks:
-      - api
   event:
     container_name: event
     build:
@@ -62,24 +30,6 @@ services:
     depends_on:
       - auth-db
       - event-db
-
-  auth-db:
-    image: postgres:15.4-alpine
-    container_name: auth-db
-    restart: always
-    tty: true
-    environment:
-      POSTGRES_DB: auth
-      POSTGRES_USER: auth
-      POSTGRES_PASSWORD: auth
-    expose:
-      - '5432:5432'
-    ports:
-      - '5432:5432'
-    volumes:
-      - postgres-auth:/var/lib/postgresql/data
-    networks:
-      - api
   event-db:
     image: postgres:15.4-alpine
     container_name: event-db
@@ -90,9 +40,9 @@ services:
       POSTGRES_USER: event
       POSTGRES_PASSWORD: event
     expose:
-      - '5433:5432'
+      - '5432:5432'
     ports:
-      - '5433:5432'
+      - '5432:5432'
     volumes:
       - postgres-event:/var/lib/postgresql/data
     networks:
