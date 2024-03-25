@@ -16,7 +16,6 @@ services:
     networks:
       - api
     depends_on:
-      - auth
       - event-db
   migrator:
     container_name: migrations
@@ -24,11 +23,9 @@ services:
       context: ../
       dockerfile: ./docker/migrator/Dockerfile
     tty: true
-    restart: always
     networks:
       - api
     depends_on:
-      - auth-db
       - event-db
   event-db:
     image: postgres:15.4-alpine
@@ -65,8 +62,6 @@ services:
       - api
 
 volumes:
-  postgres-auth:
-    driver: local
   postgres-event:
     driver: local
   keydb:
