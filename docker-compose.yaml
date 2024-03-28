@@ -18,7 +18,7 @@ services:
     depends_on:
       - event-db
   chat:
-    container_name: event
+    container_name: chat
     build:
       context: ../
       dockerfile: ./docker/chat/Dockerfile
