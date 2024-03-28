@@ -11,9 +11,23 @@ services:
     tty: true
     expose:
       - '8001:8001'
-      - '8002:8002'
     ports:
       - '8001:8001'
+    networks:
+      - api
+    depends_on:
+      - event-db
+  chat:
+    container_name: event
+    build:
+      context: ../
+      dockerfile: ./docker/chat/Dockerfile
+    image: event
+    restart: always
+    tty: true
+    expose:
+      - '8002:8002'
+    ports:
       - '8002:8002'
     networks:
       - api
