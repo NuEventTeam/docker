@@ -3,7 +3,7 @@ WORKDIR /app
 
 RUN apk add --no-cache tzdata
 
-COPY ../../event .
+COPY ../../chat .
 
 RUN go  build -v -ldflags="-w -s" -o app ./cmd/main.go
 
