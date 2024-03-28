@@ -22,7 +22,7 @@ services:
     build:
       context: ../
       dockerfile: ./docker/chat/Dockerfile
-    image: event
+    image: chat
     restart: always
     tty: true
     expose:
