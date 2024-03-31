@@ -17,22 +17,22 @@ services:
       - api
     depends_on:
       - event-db
-  chat:
-    container_name: chat
-    build:
-      context: ../
-      dockerfile: ./docker/chat/Dockerfile
-    image: chat
-    restart: always
-    tty: true
-    expose:
-      - '8002:8002'
-    ports:
-      - '8002:8002'
-    networks:
-      - api
-    depends_on:
-      - event-db
+#  chat:
+#    container_name: chat
+#    build:
+#      context: ../
+#      dockerfile: ./docker/chat/Dockerfile
+#    image: chat
+#    restart: always
+#    tty: true
+#    expose:
+#      - '8002:8002'
+#    ports:
+#      - '8002:8002'
+#    networks:
+#      - api
+#    depends_on:
+#      - event-db
   migrator:
     container_name: migrations
     build:
