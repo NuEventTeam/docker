@@ -52,8 +52,6 @@ services:
       POSTGRES_DB: event
       POSTGRES_USER: event
       POSTGRES_PASSWORD: event
-      TZ: 'GMT+5'
-      PGTZ: 'GMT+5'
     expose:
       - '5432:5432'
     ports:
