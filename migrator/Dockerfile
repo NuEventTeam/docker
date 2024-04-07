@@ -8,6 +8,11 @@ RUN go  build -v -ldflags="-w -s" -o app main.go
 FROM alpine:3.18
 WORKDIR /app
 
+COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
+
+
+ENV Asia/Atyrau
+
 COPY --from=builder /app .
 
 ENTRYPOINT ["./app", "migrate", "up"]

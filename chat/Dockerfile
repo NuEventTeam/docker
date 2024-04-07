@@ -13,7 +13,8 @@ WORKDIR /app
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 
 
-ENV TZ=Asia/Qyzylorda
+ENV TZ=Asia/Atyrau
+
 
 COPY --from=builder /app .
 
