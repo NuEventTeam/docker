@@ -13,7 +13,7 @@ WORKDIR /app
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 
 
-ENV TZ=Asia/Almaty
+ENV TZ=Etc/GMT+5
 
 COPY --from=builder /app .
 
