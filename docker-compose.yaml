@@ -17,7 +17,10 @@ services:
       - api
     depends_on:
       - event-db
-#  chat:
+    volumes:
+      - event-app:/var/www/event/static
+
+  #  chat:
 #    container_name: chat
 #    build:
 #      context: ../
@@ -80,6 +83,8 @@ volumes:
   postgres-event:
     driver: local
   keydb:
+    driver: local
+  event-app:
     driver: local
 
 
